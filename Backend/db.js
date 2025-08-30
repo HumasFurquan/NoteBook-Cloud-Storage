@@ -1,7 +1,14 @@
 const mongoose = require('mongoose');
-const mongoURI = "mongodb://127.0.0.1:27017/inotebook";
+require('dotenv').config();
+
+const mongoURI = process.env.MONGO_URI;
 
 module.exports = async function connectToMongo() {
-  await mongoose.connect(mongoURI);
-  console.log("Connected to Mongo");
+  try {
+    await mongoose.connect(mongoURI);
+    console.log("✅ Connected to MongoDB Atlas");
+  } catch (error) {
+    console.error("❌ Error connecting to MongoDB:", error.message);
+    process.exit(1);
+  }
 };

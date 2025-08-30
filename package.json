@@ -1,0 +1,27 @@
+{
+  "name": "notebook-cloud-storage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HumasFurquan/NoteBook-Cloud-Storage.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/HumasFurquan/NoteBook-Cloud-Storage/issues"
+  },
+  "homepage": "https://github.com/HumasFurquan/NoteBook-Cloud-Storage#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

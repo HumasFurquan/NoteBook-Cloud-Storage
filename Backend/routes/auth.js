@@ -11,7 +11,7 @@ const JWT_SECRET = 'your_secret_here';
 router.post('/createuser', [
   body('name').isLength({min:3}),
   body('email').isEmail(),
-  body('password').isLength({min:5})
+  body('password', "Password must be at least 5 characters long").isLength({min:5})
 ], async (req,res)=>{
   const errors = validationResult(req);
   if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
@@ -30,8 +30,8 @@ router.post('/createuser', [
 
 // login
 router.post('/login', [
-  body('email').isEmail(),
-  body('password').exists()
+  body('email', "Please enter a valid email address").isEmail(),
+  body('password', "Password cannot be blank").exists()
 ], async (req,res)=>{
   const errors = validationResult(req);
   if(!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
