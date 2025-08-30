@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router();
-const JWT_SECRET = 'your_secret_here';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // create user
 router.post('/createuser', [
