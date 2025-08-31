@@ -1,0 +1,45 @@
+.alert-box {
+  margin: 10px;
+  padding: 12px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #fff;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  animation: slideDown 0.3s ease;
+}
+
+/* Success Alert */
+.alert-box.success {
+  background-color: #28a745;
+}
+
+/* Danger Alert */
+.alert-box.danger {
+  background-color: #dc3545;
+}
+
+/* Info Alert */
+.alert-box.info {
+  background-color: #17a2b8;
+}
+
+/* Warning Alert */
+.alert-box.warning {
+  background-color: #ffc107;
+  color: #333;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

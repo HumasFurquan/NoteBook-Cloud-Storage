@@ -1,0 +1,62 @@
+.addnote-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  background-color: #fafafa;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.addnote-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.addnote-form .form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.addnote-form label {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.addnote-form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.addnote-form input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+.addnote-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.addnote-btn:disabled {
+  background-color: #a0c5ff;
+  cursor: not-allowed;
+}
+
+.addnote-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}

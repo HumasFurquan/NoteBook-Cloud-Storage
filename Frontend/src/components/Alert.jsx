@@ -1,11 +1,14 @@
-export default function Alert({ alert }) {
+import React from 'react';
+import './Alert.css';
+
+const Alert = ({ alert }) => {
+  if (!alert) return <div style={{ height: "50px" }}></div>;
+
   return (
-    <div style={{ height: 50 }}>
-      {alert && (
-        <div className={`alert alert-${alert.type} m-2`} role="alert">
-          <strong>{alert.type}</strong>: {alert.msg}
-        </div>
-      )}
+    <div className={`alert-box ${alert.type}`}>
+      <strong>{alert.type.charAt(0).toUpperCase() + alert.type.slice(1)}</strong>: {alert.msg}
     </div>
   );
-}
+};
+
+export default Alert;

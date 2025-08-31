@@ -1,4 +1,7 @@
 import Notes from "./Notes";
-export function Home({ showAlert }) {
+
+function Home({ showAlert }) {
   return <Notes showAlert={showAlert} />;
 }
+
+export default Home;
