@@ -1,53 +1,63 @@
 .addnote-container {
-  max-width: 500px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
+  max-width: 31.25rem; /* 500px */
+  margin: 1.875rem auto; /* 30px top/bottom */
+  padding: 1.25rem; /* 20px */
+  border: 0.125rem solid #ccc; /* 2px */
+  border-radius: 0.625rem; /* 10px */
   background-color: #fafafa;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 0.625rem rgba(0,0,0,0.1); /* 10px */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center horizontally */
+  box-sizing: border-box;
 }
 
 .addnote-container h2 {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem; /* 20px */
   color: #333;
+  font-size: 1.5rem; /* responsive */
+}
+
+.addnote-form {
+  width: 100%;
 }
 
 .addnote-form .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 0.9375rem; /* 15px */
   display: flex;
   flex-direction: column;
 }
 
 .addnote-form label {
-  margin-bottom: 5px;
+  margin-bottom: 0.3125rem; /* 5px */
   font-weight: 500;
   color: #555;
+  font-size: 1rem;
 }
 
 .addnote-form input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+  padding: 0.625rem; /* 10px */
+  border: 0.0625rem solid #ccc; /* 1px */
+  border-radius: 0.3125rem; /* 5px */
+  font-size: 1rem;
 }
 
 .addnote-form input:focus {
   outline: none;
   border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0,123,255,0.3);
+  box-shadow: 0 0 0.3125rem rgba(0,123,255,0.3); /* 5px */
 }
 
 .addnote-btn {
   width: 100%;
-  padding: 12px;
+  padding: 0.75rem; /* 12px */
   background-color: #007bff;
   border: none;
   color: #fff;
-  font-size: 18px;
+  font-size: 1.125rem; /* 18px */
   font-weight: 500;
-  border-radius: 5px;
+  border-radius: 0.3125rem; /* 5px */
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
@@ -59,4 +69,16 @@
 
 .addnote-btn:hover:not(:disabled) {
   background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .addnote-container {
+    max-width: 90%; /* almost full width */
+    padding: 1rem;
+  }
+
+  .addnote-btn {
+    font-size: 1rem; /* slightly smaller for mobile */
+  }
 }

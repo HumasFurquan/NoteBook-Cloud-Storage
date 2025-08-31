@@ -1,14 +1,18 @@
 .alert-box {
-  margin: 10px;
+  position: fixed;      /* make it float over content */
+  top: 5.5rem;            /* adjust based on navbar height */
+  right: 1rem;          /* distance from right edge */
+  margin: 0;            /* remove default margin */
   padding: 12px 20px;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 16px;
   color: #fff;
-  min-height: 40px;
+  min-height: 2rem;
   display: flex;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
   animation: slideDown 0.3s ease;
+  z-index: 2000;        /* ensure it is above everything */
 }
 
 /* Success Alert */

@@ -9,6 +9,9 @@ module.exports = async function connectToMongo() {
     console.log("✅ Connected to MongoDB Atlas");
   } catch (error) {
     console.error("❌ Error connecting to MongoDB:", error.message);
-    process.exit(1);
+
+    // process.exit(1) will kill the server if MongoDB fails to connect that's why for development i have commented it.
+    
+    // process.exit(1);
   }
 };
