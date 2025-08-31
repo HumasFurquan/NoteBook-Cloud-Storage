@@ -23,7 +23,11 @@ const Navbar = () => {
             <Link className={isActive('/signup')} to="/signup">Signup</Link>
           </>
         ) : (
+          <>
+          {/* ✅ Media Page link */}
+            <Link className={isActive('/media')} to="/media">Media</Link>
           <button className="logout-btn" onClick={logout}>Logout</button>
+          </>
         )}
       </div>
     </nav>
