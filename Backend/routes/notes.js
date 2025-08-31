@@ -33,7 +33,7 @@ router.put('/updatenote/:id', fetchuser, async (req,res)=>{
   if(tag) newNote.tag = tag;
 
   let note = await Note.findById(req.params.id);
-  if(!note) return res.status(404).send('Not Found');
+  if(!note) return res.status(404).send('Not Found (Either Id or auth-token is Invalid)');
   if(note.user.toString() !== req.user.id) return res.status(401).send('Not Allowed');
 
   note = await Note.findByIdAndUpdate(req.params.id, { $set:newNote }, { new:true });
@@ -43,11 +43,11 @@ router.put('/updatenote/:id', fetchuser, async (req,res)=>{
 // delete note
 router.delete('/deletenote/:id', fetchuser, async (req,res)=>{
   let note = await Note.findById(req.params.id);
-  if(!note) return res.status(404).send('Not Found');
+  if(!note) return res.status(404).send('Not Found (Either Id or auth-token is Invalid)');
   if(note.user.toString() !== req.user.id) return res.status(401).send('Not Allowed');
 
   await Note.findByIdAndDelete(req.params.id);
-  res.json({ success:true });
+  res.json({ message: "Note Deleted Successfully" });
 });
 
 module.exports = router;

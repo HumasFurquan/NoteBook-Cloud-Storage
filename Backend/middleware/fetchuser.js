@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'your_secret_here';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = function fetchuser(req, res, next) {
   const token = req.header('auth-token');
