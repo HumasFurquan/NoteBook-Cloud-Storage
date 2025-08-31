@@ -15,7 +15,7 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link className="brand" to="/">iNotebook</Link>
+      <Link className="brand" to="/">iNoteBook</Link>
       <div className="nav-actions">
         {!localStorage.getItem('token') ? (
           <>

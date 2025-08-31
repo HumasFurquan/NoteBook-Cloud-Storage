@@ -2,15 +2,25 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #222;
+  background-color: #146192;
   padding: 10px 20px;
   color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+  width: calc(100% - 2rem); /* subtract left + right margin */
+  margin: 1rem;
+  box-sizing: border-box; /* include padding in width */
+  border-radius: 8px;  /* remove rounding if you want flush edges */
+  position: fixed;   /* optional: make it stick at top */
+  top: 0;            /* optional: align at top */
+  left: 0;           /* optional: align at left */
+  z-index: 1000;     /* optional: stay above content */
 }
+
 
 .brand {
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
   font-weight: bold;
   text-decoration: none;
 }
