@@ -1,89 +1,133 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import axios from "axios";
 import "./Upload.css";
 
 function MediaUpload() {
   const [file, setFile] = useState(null);
-  const [uploadedUrl, setUploadedUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [allMedia, setAllMedia] = useState([]); // store all uploaded files
+  const [allMedia, setAllMedia] = useState([]);
+  const [toasts, setToasts] = useState([]);
+  const [showMediaList, setShowMediaList] = useState(false);
 
-  // Upload file
+  const fileInputRef = useRef(null); // <-- Ref for file input
+
+  const addToast = (message, type = "info") => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    }, 4000);
+  };
+
+  const fetchAllMedia = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/media/all", {
+        headers: { "auth-token": localStorage.getItem("token") },
+      });
+      setAllMedia(res.data);
+      // Removed the "Media list refreshed" toast
+    } catch (error) {
+      console.error("Failed to fetch media", error);
+      addToast(
+        "❌ Failed to fetch media: " +
+          (error.response?.data?.error || error.message),
+        "error"
+      );
+    }
+  };
+
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file) {
+      addToast("❌ Please select a file first!", "error");
+      return;
+    }
 
     setLoading(true);
-    setProgress(30);
+    setProgress(0);
 
     const formData = new FormData();
     formData.append("file", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/media/upload", {
-        method: "POST",
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-        body: formData,
-      });
+      const res = await axios.post(
+        "http://localhost:5000/api/media/upload",
+        formData,
+        {
+          headers: { "auth-token": localStorage.getItem("token") },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setProgress(percent);
+          },
+        }
+      );
 
-      setProgress(70);
+      // ✅ Upload success toast
+      addToast(`✅ Uploaded File: ${res.data.filename || "View File"}`, "success");
 
-      const data = await res.json();
-      setUploadedUrl(data.url);
+      // Reset file input
+      setFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = null;
 
       setProgress(100);
+
+      fetchAllMedia(); // still fetch media, but no toast
+
       setTimeout(() => setLoading(false), 500);
     } catch (error) {
       console.error("Upload failed", error);
+
+      let msg = error.response?.data?.error || error.message;
+      if (msg.includes("File size too large")) {
+        const matches = msg.match(/Got (\d+)\. Maximum is (\d+)/);
+        if (matches) {
+          const gotMB = (parseInt(matches[1]) / (1024 * 1024)).toFixed(2);
+          const maxMB = (parseInt(matches[2]) / (1024 * 1024)).toFixed(2);
+          msg = `❌ Upload error: File size too large. Got ${gotMB} MB. Maximum is ${maxMB} MB.`;
+        }
+      }
+
+      addToast(msg, "error");
       setLoading(false);
     }
   };
 
-  // Fetch all uploaded files
-  const fetchAllMedia = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/media/all", {
-        method: "GET",
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
-      });
-      const data = await res.json();
-      setAllMedia(data);
-    } catch (error) {
-      console.error("Failed to fetch media", error);
-    }
-  };
-
-  // Delete a file
   const deleteMedia = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/media/delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-        },
+      await axios.delete(`http://localhost:5000/api/media/delete/${id}`, {
+        headers: { "auth-token": localStorage.getItem("token") },
       });
 
-      // remove deleted file from UI
       setAllMedia(allMedia.filter((item) => item._id !== id));
+      addToast("✅ File deleted", "success");
     } catch (error) {
       console.error("Failed to delete media", error);
+      addToast(
+        "❌ Failed to delete file: " +
+          (error.response?.data?.error || error.message),
+        "error"
+      );
     }
   };
 
   return (
     <div className="upload-container">
+      {/* Toast Notifications */}
+      <div className="toast-container">
+        {toasts.map((toast) => (
+          <div key={toast.id} className={`toast ${toast.type}`}>
+            {toast.message}
+          </div>
+        ))}
+      </div>
+
       {/* Loading bar */}
-      {loading && (
-        <div
-          className="loading-bar"
-          style={{ width: `${progress}%` }}
-        ></div>
-      )}
+      {loading && <div className="loading-bar" style={{ width: `${progress}%` }}></div>}
 
       <input
+        ref={fileInputRef}
         type="file"
         className="upload-input"
         onChange={(e) => setFile(e.target.files[0])}
@@ -92,35 +136,23 @@ function MediaUpload() {
         Upload
       </button>
 
-      {uploadedUrl && (
-        <div className="upload-result">
-          <p>✅ Uploaded File:</p>
-          <a
-            href={uploadedUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {file?.name}
-          </a>
-        </div>
-      )}
-
-      {/* Button to show all files */}
-      <button className="upload-button" onClick={fetchAllMedia}>
-        Show Uploaded Files
+      {/* Show/Hide Uploaded Files */}
+      <button
+        className={`upload-button show-hide-btn ${showMediaList ? "active" : ""}`}
+        onClick={() => {
+          if (!showMediaList) fetchAllMedia();
+          setShowMediaList(!showMediaList);
+        }}
+      >
+        {showMediaList ? "Hide Uploaded Files" : "Show Uploaded Files"}
       </button>
 
-      {/* Show all uploaded files */}
-      {allMedia.length > 0 && (
+      {showMediaList && allMedia.length > 0 && (
         <div className="media-list">
           <h3>📂 Uploaded Files</h3>
           {allMedia.map((media) => (
             <div key={media._id} className="media-item">
-              <a
-                href={media.url}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href={media.url} target="_blank" rel="noreferrer">
                 {media.filename}
               </a>
               <button
